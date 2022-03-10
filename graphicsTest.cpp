@@ -8,6 +8,7 @@
 #define ANIMATEDTEXTTEST 4
 #define BOXMOVECOLLISIONTEST 5
 #define TEXTUREBOXCOLLISIONTEST 6
+#define CHANGINGSCREENSTEST 7
 
 int main(int argc, char* argv[])
 {
@@ -53,6 +54,9 @@ int main(int argc, char* argv[])
 			break;
 		case TEXTUREBOXCOLLISIONTEST:
 			moveTextureBoxWithCollisions();
+			break;
+		case CHANGINGSCREENSTEST:
+			changingScreens();
 			break;
 		default:
 			std::cout << "Invalid Number\n";
