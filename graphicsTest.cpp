@@ -9,7 +9,8 @@
 #define SCISSORTEST 2
 #define BALLMOVINGTEST 3
 #define ANIMATEDTEXTTEST 4
-#define TESTTORUN ANIMATEDTEXTTEST
+#define BOXMOVECOLLISIONTEST 5
+#define TESTTORUN BOXMOVECOLLISIONTEST
 
 void basicTest()
 {
@@ -193,7 +194,7 @@ void animatedText()
 		BeginDrawing();
 
 		ClearBackground(RAYWHITE);
-		DrawRectangleLinesEx(textBox, 2, BLACK); // Draws text box around text
+		DrawRectangleLinesEx(textBox, 2, BLACK); // Draws a black text box around text
 		DrawText(TextSubtext(stringMessages[messageToDisplay].c_str(), 0, framesCounter / defaultSpeed), 210, 160, 20, BLACK);
 
 		DrawText("PRESS [ENTER] to RESTART!", 240, 260, 20, LIGHTGRAY);
@@ -210,6 +211,74 @@ void animatedText()
 	//--------------------------------------------------------------------------------------
 }
 
+void moveBoxWithCollisions()
+{
+	// Initialization
+	//--------------------------------------------------------------------------------------
+	const int screenWidth = 800;
+	const int screenHeight = 450;
+
+	InitWindow(screenWidth, screenHeight, "example - keyboard input and collision");
+
+	//Vector2 ballPosition = { (float)screenWidth / 2, (float)screenHeight / 2 };
+	Rectangle box = { (float)screenWidth / 2, (float)screenHeight / 2, 30, 30 };
+
+
+	SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
+	//--------------------------------------------------------------------------------------
+
+	// Main game loop
+	while (!WindowShouldClose())    // Detect window close button or ESC key
+	{
+		// Update
+		//----------------------------------------------------------------------------------
+		float movingSpeed = 2.0f;
+		// simulate running
+		if (IsKeyDown(KEY_B))
+			movingSpeed = 4.0f;
+
+		// Only able to move in one direction at a time
+		if (IsKeyDown(KEY_RIGHT)) box.x += movingSpeed;
+		else if (IsKeyDown(KEY_LEFT)) box.x -= movingSpeed;
+		else if (IsKeyDown(KEY_UP)) box.y -= movingSpeed;
+		else if (IsKeyDown(KEY_DOWN)) box.y += movingSpeed;
+
+		// Able to move in any direction
+		//if (IsKeyDown(KEY_RIGHT)) box.x += movingSpeed;
+		//if (IsKeyDown(KEY_LEFT)) box.x -= movingSpeed;
+		//if (IsKeyDown(KEY_UP)) box.y -= movingSpeed;
+		//if (IsKeyDown(KEY_DOWN)) box.y += movingSpeed;
+
+		// Make sure Box does not go out of move area limits
+		if ((box.x + box.width) >= GetScreenWidth()) box.x = GetScreenWidth() - box.width;
+		else if (box.x <= 0) box.x = 0;
+
+		if ((box.y + box.height) >= GetScreenHeight()) box.y = GetScreenHeight() - box.height;
+		else if (box.y <= 0) box.y = 0;
+
+		//----------------------------------------------------------------------------------
+
+		// Draw
+		//----------------------------------------------------------------------------------
+		BeginDrawing();
+
+		ClearBackground(RAYWHITE);
+
+		DrawText("move the Box with arrow keys", 10, 10, 20, DARKGRAY);
+
+		DrawRectangleRec(box, RED);
+
+		EndDrawing();
+		//----------------------------------------------------------------------------------
+	}
+
+	// De-Initialization
+	//--------------------------------------------------------------------------------------
+	CloseWindow();        // Close window and OpenGL context
+	//--------------------------------------------------------------------------------------
+
+}
+
 int main(int argc, char** argv[])
 {
 
@@ -221,6 +290,8 @@ int main(int argc, char** argv[])
 	moveBallWithArrowKeys();
 #elif TESTTORUN==ANIMATEDTEXTTEST
 	animatedText();
+#elif TESTTORUN==BOXMOVECOLLISIONTEST
+	moveBoxWithCollisions();
 #endif
 
 	return 0;
