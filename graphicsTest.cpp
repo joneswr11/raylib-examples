@@ -157,6 +157,7 @@ void animatedText()
 	int framesCounter = 0;
 	int messageToDisplay = 0;
 	const int defaultSpeed = 10;
+	Rectangle textBox = { 200, 150, 400, 75 }; // sets size for text box
 
 	SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
 	//--------------------------------------------------------------------------------------
@@ -192,8 +193,8 @@ void animatedText()
 		BeginDrawing();
 
 		ClearBackground(RAYWHITE);
-
-		DrawText(TextSubtext(stringMessages[messageToDisplay].c_str(), 0, framesCounter / defaultSpeed), 210, 160, 20, MAROON);
+		DrawRectangleLinesEx(textBox, 2, BLACK); // Draws text box around text
+		DrawText(TextSubtext(stringMessages[messageToDisplay].c_str(), 0, framesCounter / defaultSpeed), 210, 160, 20, BLACK);
 
 		DrawText("PRESS [ENTER] to RESTART!", 240, 260, 20, LIGHTGRAY);
 		DrawText("HOLD [A] or [B] to SPEED UP!", 239, 300, 20, LIGHTGRAY);
