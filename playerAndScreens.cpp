@@ -20,14 +20,19 @@ void Screens::drawEnding(int screenWidth, int screenHeight)
 	DrawText("PRESS ENTER or TAP to RETURN to TITLE SCREEN", 120, 220, 20, DARKBLUE);
 }
 
-void Screens::loadGamePlayScreen()
+void GamePlay::loadGamePlayScreen()
 {
 	player.loadPlayer();
 	currentFrame = 0;
 	framesSpeed = 8;
 }
 
-void Screens::updateGamePlayScreen(int &framesCounter, int FPS)
+void GamePlay::unloadGamePlayScreen()
+{
+	player.unload();
+}
+
+void GamePlay::updateGamePlayScreen(int &framesCounter, int FPS)
 {
 
 	float movingSpeed = 2.0f;
@@ -74,7 +79,7 @@ void Screens::updateGamePlayScreen(int &framesCounter, int FPS)
 	}
 }
 
-void Screens::drawGamePlay()
+void GamePlay::drawGamePlay()
 {
 	DrawTextureRec(player.getPlayer(), player.getFrameRec(), player.getPosition(), WHITE);
 }

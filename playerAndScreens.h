@@ -21,17 +21,24 @@ private:
 
 };
 
+class GamePlay
+{
+public:
+	void drawGamePlay();
+	void loadGamePlayScreen();
+	void updateGamePlayScreen(int &framesCounter, int FPS);
+	void unloadGamePlayScreen();
+private:
+	PlayerCharacter player;
+	int currentFrame;
+	int framesSpeed;            // Number of spritesheet frames shown by second
+};
+
 class Screens
 {
 public:
 	void drawLoading();
 	void drawTitle(int screenWidth, int screenHeight);
 	void drawEnding(int screenWidth, int screenHeight);
-	void drawGamePlay();
-	void loadGamePlayScreen();
-	void updateGamePlayScreen(int &framesCounter, int FPS);
-private:
-	PlayerCharacter player;
-	int currentFrame;
-	int framesSpeed;            // Number of spritesheet frames shown by second
+	GamePlay gamePlay;
 };
