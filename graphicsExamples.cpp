@@ -397,6 +397,8 @@ void changingScreens()
 	SetTargetFPS(FPS);		// Set desired framerate (frames-per-second)
 
 	Screens screens;
+	screens.loadingScreen.initLoadingScreen(screenWidth, screenHeight);
+
 
 	//--------------------------------------------------------------------------------------
 
@@ -410,14 +412,14 @@ void changingScreens()
 		case LOGO:
 		{
 			// TODO: Update LOGO screen variables here!
-
-			framesCounter++;    // Count frames
+			if (screens.loadingScreen.updateState(framesCounter) == 1)
+				currentScreen = TITLE;
 
 			// Wait for 2 seconds (120 frames) before jumping to TITLE screen
-			if (framesCounter > 120)
-			{
-				currentScreen = TITLE;
-			}
+			//if (framesCounter > 120)
+			//{
+			//	currentScreen = TITLE;
+			//}
 		} break;
 		case TITLE:
 		{
@@ -465,7 +467,7 @@ void changingScreens()
 		case LOGO:
 		{
 			// TODO: Draw LOGO screen here!
-			screens.drawLoading();
+			screens.loadingScreen.drawLoadingScreen(framesCounter);
 
 
 		} break;

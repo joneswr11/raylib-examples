@@ -34,11 +34,35 @@ private:
 	int framesSpeed;            // Number of spritesheet frames shown by second
 };
 
+class LoadingScreen
+{
+public:
+	void initLoadingScreen(int screenWidth, int screenHeight);
+	int updateState(int &framesCounter);
+	void drawLoadingScreen(int &framesCounter);
+private:
+	int logoPositionX;
+	int logoPositionY;
+
+	int lettersCount;
+
+	int topSideRecWidth;
+	int leftSideRecHeight;
+
+	int bottomSideRecWidth;
+	int rightSideRecHeight;
+
+	int state;                  // Tracking animation states (State Machine)
+	float alpha;             // Useful for fading
+
+
+};
+
 class Screens
 {
 public:
-	void drawLoading();
 	void drawTitle(int screenWidth, int screenHeight);
 	void drawEnding(int screenWidth, int screenHeight);
+	LoadingScreen loadingScreen;
 	GamePlay gamePlay;
 };
