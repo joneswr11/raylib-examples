@@ -3,7 +3,7 @@
 // https://github.com/raysan5/raylib/tree/master/examples
 // https://github.com/raysan5/raylib-games
 
-#include "raylib.h"
+#include "playerAndScreens.h"
 #include "graphicsExamples.h"
 #include <iostream>
 
@@ -389,20 +389,15 @@ void changingScreens()
 	// TODO: Initialize all required variables and load all required data here!
 
 	InitWindow(screenWidth, screenHeight, "raylib [core] example - basic screen manager (modified)");
-
-	Texture2D player = LoadTexture("resources/run.png");        // Texture loading
-
-	Vector2 position = { 350.0f, 280.0f };
-	Rectangle frameRec = { 0.0f, 0.0f, (float)player.width / 8, (float)player.height };
-	int currentFrame = 0;
-
-	int framesSpeed = 8;            // Number of spritesheet frames shown by second
 	
 	GameScreen currentScreen = LOGO;
 
 	int framesCounter = 0;  // Useful to count frames
 
 	SetTargetFPS(FPS);		// Set desired framerate (frames-per-second)
+
+	Screens screens;
+	PlayerCharacter player;
 
 	//--------------------------------------------------------------------------------------
 
@@ -428,62 +423,22 @@ void changingScreens()
 		case TITLE:
 		{
 			// TODO: Update TITLE screen variables here!
-
 			// Press enter to change to GAMEPLAY screen
 			if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
 			{
 				currentScreen = GAMEPLAY;
+				screens.loadGamePlayScreen();
 			}
 		} break;
 		case GAMEPLAY:
 		{
 			// TODO: Update GAMEPLAY screen variables here!
-			float movingSpeed = 2.0f;
-			// simulate running
-			if (IsKeyDown(KEY_B))
-				movingSpeed = 4.0f;
-
-			// Only able to move in one direction at a time
-			if (IsKeyDown(KEY_RIGHT)) position.x += movingSpeed;
-			else if (IsKeyDown(KEY_LEFT)) position.x -= movingSpeed;
-			else if (IsKeyDown(KEY_UP)) position.y -= movingSpeed;
-			else if (IsKeyDown(KEY_DOWN)) position.y += movingSpeed;
-
-			// makes the sprite move faster or slower along with the actual movement of the box
-			framesSpeed = (int)movingSpeed * 3;
-
-			// Make sure player does not go out of move area limits
-			if ((position.x + frameRec.width) >= GetScreenWidth()) position.x = GetScreenWidth() - frameRec.width;
-			else if (position.x <= 0) position.x = 0;
-
-			if ((position.y + frameRec.height) >= GetScreenHeight()) position.y = GetScreenHeight() - frameRec.height;
-			else if (position.y <= 0) position.y = 0;
-
-			framesCounter++;
-
-			// if the player is moving, it moves moves to the next sprite character in the file and display's it
-			if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_UP))
-			{
-				if (framesCounter >= (FPS / framesSpeed))
-				{
-					framesCounter = 0;
-					currentFrame++;
-
-					if (currentFrame > 7) currentFrame = 0;
-
-					frameRec.x = (float)currentFrame*(float)player.width / 8;
-				}
-			}
-			// if the player is not moving it reverts back to the first sprite character in the file
-			else
-			{
-				currentFrame = 0;
-				frameRec.x = (float)currentFrame*(float)player.width / 8;
-			}
+			screens.updateGamePlayScreen(framesCounter, FPS);
 			// Press enter to change to ENDING screen
 			if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
 			{
 				currentScreen = ENDING;
+				player.unload();
 			}
 		} break;
 		case ENDING:
@@ -511,22 +466,20 @@ void changingScreens()
 		case LOGO:
 		{
 			// TODO: Draw LOGO screen here!
-			DrawText("LOGO SCREEN", 20, 20, 40, LIGHTGRAY);
-			DrawText("Loading Game...", 290, 220, 20, GRAY);
+			screens.drawLoading();
+
 
 		} break;
 		case TITLE:
 		{
 			// TODO: Draw TITLE screen here!
-			DrawRectangle(0, 0, screenWidth, screenHeight, GREEN);
-			DrawText("TITLE SCREEN", 20, 20, 40, DARKGREEN);
-			DrawText("PRESS ENTER or TAP to JUMP to GAMEPLAY SCREEN", 120, 220, 20, DARKGREEN);
+			screens.drawTitle(screenWidth, screenHeight);
 
 		} break;
 		case GAMEPLAY:
 		{
 			// TODO: Draw GAMEPLAY screen here!
-			DrawTextureRec(player, frameRec, position, WHITE);
+			screens.drawGamePlay();
 			//DrawRectangle(0, 0, screenWidth, screenHeight, PURPLE);
 			//DrawText("GAMEPLAY SCREEN", 20, 20, 40, MAROON);
 			//DrawText("PRESS ENTER or TAP to JUMP to ENDING SCREEN", 130, 220, 20, MAROON);
@@ -535,9 +488,7 @@ void changingScreens()
 		case ENDING:
 		{
 			// TODO: Draw ENDING screen here!
-			DrawRectangle(0, 0, screenWidth, screenHeight, BLUE);
-			DrawText("ENDING SCREEN", 20, 20, 40, DARKBLUE);
-			DrawText("PRESS ENTER or TAP to RETURN to TITLE SCREEN", 120, 220, 20, DARKBLUE);
+			screens.drawEnding(screenWidth, screenHeight);
 
 		} break;
 		default: break;
@@ -551,7 +502,7 @@ void changingScreens()
 	//--------------------------------------------------------------------------------------
 
 	// TODO: Unload all loaded data (textures, fonts, audio) here!
-	UnloadTexture(player);       // Texture unloading
+	player.unload();       // Texture unloading
 	CloseWindow();        // Close window and OpenGL context
 	//--------------------------------------------------------------------------------------
 
