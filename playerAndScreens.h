@@ -32,12 +32,13 @@ private:
 	PlayerCharacter player;
 	int currentFrame;
 	int framesSpeed;            // Number of spritesheet frames shown by second
+	Camera2D camera;
 };
 
 class LoadingScreen
 {
 public:
-	void initLoadingScreen(int screenWidth, int screenHeight);
+	void initLoadingScreen();
 	int updateState(int &framesCounter);
 	void drawLoadingScreen(int &framesCounter);
 private:
@@ -63,8 +64,8 @@ private:
 class Screens
 {
 public:
-	void drawTitle(int screenWidth, int screenHeight);
-	void drawEnding(int screenWidth, int screenHeight);
+	void drawTitle();
+	void drawEnding();
 	LoadingScreen loadingScreen;
 	GamePlay gamePlay;
 };

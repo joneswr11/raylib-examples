@@ -6,16 +6,16 @@
 //	DrawText("Loading Game...", 290, 220, 20, GRAY);
 //}
 
-void Screens::drawTitle(int screenWidth, int screenHeight)
+void Screens::drawTitle()
 {
-	DrawRectangle(0, 0, screenWidth, screenHeight, GREEN);
+	DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), GREEN);
 	DrawText("TITLE SCREEN", 20, 20, 40, DARKGREEN);
 	DrawText("PRESS ENTER or TAP to JUMP to GAMEPLAY SCREEN", 120, 220, 20, DARKGREEN);
 }
 
-void Screens::drawEnding(int screenWidth, int screenHeight)
+void Screens::drawEnding()
 {
-	DrawRectangle(0, 0, screenWidth, screenHeight, BLUE);
+	DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), BLUE);
 	DrawText("ENDING SCREEN", 20, 20, 40, DARKBLUE);
 	DrawText("PRESS ENTER or TAP to RETURN to TITLE SCREEN", 120, 220, 20, DARKBLUE);
 }
@@ -25,6 +25,12 @@ void GamePlay::loadGamePlayScreen()
 	player.loadPlayer();
 	currentFrame = 0;
 	framesSpeed = 1;
+
+	camera = { 0 };
+	camera.target = player.getPosition();
+	camera.offset = player.getPosition();
+	camera.rotation = 0.0f;
+	camera.zoom = 1.0f;
 }
 
 void GamePlay::unloadGamePlayScreen()
@@ -77,20 +83,27 @@ void GamePlay::updateGamePlayScreen(int &framesCounter, int FPS)
 		currentFrame = 0;
 		player.setXFrameRec((float)currentFrame*(float)player.getPlayer().width / 8);
 	}
+	camera.target = player.getPosition();
 }
 
 void GamePlay::drawGamePlay()
 {
-	DrawTextureRec(player.getPlayer(), player.getFrameRec(), player.getPosition(), WHITE);
+	BeginMode2D(camera);
+	DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), RED);
+	DrawRectangle(100, 200, 50, 75, BLACK);
+
+	DrawTextureRec(player.getPlayer(), player.getFrameRec(), player.getPosition(), WHITE);  // Draw part of the texture
+	EndMode2D();
 }
 
 void PlayerCharacter::loadPlayer()
 {
 	player = LoadTexture("resources/run.png");        // Texture loading
 
-	position = { 350.0f, 280.0f };
+	position = { GetScreenWidth() / 2.0f - (player.width / 8) / 2, GetScreenHeight() / 2.0f - (player.height / 2) };
 	frameRec = { 0.0f, 0.0f, (float)player.width / 8, (float)player.height };
 }
+
 
 void PlayerCharacter::unload()
 {
@@ -132,10 +145,10 @@ Vector2 PlayerCharacter::getPosition()
 	return position;
 }
 
-void LoadingScreen::initLoadingScreen(int screenWidth, int screenHeight)
+void LoadingScreen::initLoadingScreen()
 {
-	logoPositionX = screenWidth / 2 - 128;
-	logoPositionY = screenHeight / 2 - 128;
+	logoPositionX = GetScreenWidth() / 2 - 128;
+	logoPositionY = GetScreenHeight() / 2 - 128;
 
 	lettersCount = 0;
 

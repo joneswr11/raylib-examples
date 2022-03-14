@@ -9,6 +9,7 @@
 #define BOXMOVECOLLISIONTEST 5
 #define TEXTUREBOXCOLLISIONTEST 6
 #define CHANGINGSCREENSTEST 7
+#define CAMERA2D 8
 
 int main(int argc, char* argv[])
 {
@@ -57,6 +58,9 @@ int main(int argc, char* argv[])
 			break;
 		case CHANGINGSCREENSTEST:
 			changingScreens();
+			break;
+		case CAMERA2D:
+			camera2d();
 			break;
 		default:
 			std::cout << "Invalid Number\n";

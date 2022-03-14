@@ -7,3 +7,4 @@ void animatedText();
 void moveBoxWithCollisions();
 void moveTextureBoxWithCollisions();
 void changingScreens();
+void camera2d();
