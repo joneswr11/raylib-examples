@@ -24,7 +24,7 @@ void GamePlay::loadGamePlayScreen()
 {
 	player.loadPlayer();
 	currentFrame = 0;
-	framesSpeed = 8;
+	framesSpeed = 1;
 }
 
 void GamePlay::unloadGamePlayScreen()
@@ -147,10 +147,24 @@ void LoadingScreen::initLoadingScreen(int screenWidth, int screenHeight)
 
 	state = 0;                  // Tracking animation states (State Machine)
 	alpha = 1.0f;             // Useful for fading
+	blinkingAlpha = 0.0f;
+	fading = false;
 }
 
 int LoadingScreen::updateState(int &framesCounter)
 {
+	// makes the "Loading Game..." text fade in and out
+	float blink = 0.02f;
+	if (fading)
+		blink = -0.02f;
+	else
+		blink = 0.02f;
+	blinkingAlpha += blink;
+	if (blinkingAlpha >= 1)
+		fading = true;
+	else if (blinkingAlpha <= 0)
+		fading = false;
+
 	if (state == 0)                 // State 0: Small box blinking
 	{
 		framesCounter++;
@@ -199,20 +213,6 @@ int LoadingScreen::updateState(int &framesCounter)
 	else if (state == 4)            // State 4: Reset and Replay
 	{
 		return 1;
-		//if (IsKeyPressed(KEY_R))
-		//{
-		//	framesCounter = 0;
-		//	lettersCount = 0;
-
-		//	topSideRecWidth = 16;
-		//	leftSideRecHeight = 16;
-
-		//	bottomSideRecWidth = 16;
-		//	rightSideRecHeight = 16;
-
-		//	alpha = 1.0f;
-		//	state = 0;          // Return to State 0
-		//}
 	}
 	return 0;
 }
@@ -248,5 +248,5 @@ void LoadingScreen::drawLoadingScreen(int &framesCounter)
 
 		DrawText(TextSubtext("raylib", 0, lettersCount), GetScreenWidth() / 2 - 44, GetScreenHeight() / 2 + 48, 50, Fade(BLACK, alpha));
 	}
-	DrawText("Loading Game...", GetScreenWidth() / 2 - 75, GetScreenHeight() - 50, 20, GRAY);
+	DrawText("Loading Game...", GetScreenWidth() / 2 - 75, GetScreenHeight() - 50, 20, Fade(GRAY,blinkingAlpha));
 }

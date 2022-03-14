@@ -54,6 +54,8 @@ private:
 
 	int state;                  // Tracking animation states (State Machine)
 	float alpha;             // Useful for fading
+	float blinkingAlpha;
+	bool fading;
 
 
 };
