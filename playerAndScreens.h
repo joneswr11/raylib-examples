@@ -2,6 +2,7 @@
 
 #include "raylib.h"
 
+const int NUMTREES = 6;
 struct spriteData{
 	int up; // Row in the file where the sprite is facing up
 	int down; // Row in the file where the sprite is facing down
@@ -9,6 +10,21 @@ struct spriteData{
 	int right; // Row in the file where the sprite is facing right
 	int numSpritesX; // How many sprites are in a given sequence
 	int numSpritesY; // How many sprites sequences are there
+};
+
+struct spriteObject
+{
+	Rectangle frameRec;
+	Rectangle spriteRec;
+	Vector2 position;
+	Texture2D sprite;
+};
+
+struct Background
+{
+	RenderTexture2D imageTexture;
+	Rectangle src;
+	Rectangle dest;
 };
 
 class PlayerCharacter
@@ -43,7 +59,8 @@ public:
 	void unloadGamePlayScreen();
 private:
 	PlayerCharacter player;
-	Rectangle block;
+	spriteObject trees[NUMTREES];
+	Background background;
 	int currentFrame;
 	int framesSpeed;            // Number of spritesheet frames shown by second
 	Camera2D camera;

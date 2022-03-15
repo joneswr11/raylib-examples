@@ -460,7 +460,7 @@ void changingScreens()
 		//----------------------------------------------------------------------------------
 		BeginDrawing();
 
-		ClearBackground(RAYWHITE);
+		ClearBackground(BLACK);
 
 		switch (currentScreen)
 		{

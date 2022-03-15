@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
 {
 	if (argc < 2)
 	{
-		basicTest();
+		changingScreens();
 		return EXIT_SUCCESS;
 	}
 
