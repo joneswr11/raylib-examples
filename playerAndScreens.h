@@ -11,6 +11,8 @@ public:
 	void setYPos(float x);
 	void setXFrameRec(float x);
 	void setYFrameRec(float y);
+	int getNumSpritesX();
+	int getNumSpritesY();
 	Texture2D getPlayer();
 	Rectangle getFrameRec();
 	Vector2 getPosition();
@@ -18,6 +20,8 @@ private:
 	Texture2D player;
 	Rectangle frameRec;
 	Vector2 position;
+	int numSpritesX;
+	int numSpritesY;
 
 };
 
