@@ -55,28 +55,28 @@ void GamePlay::updateGamePlayScreen(int &framesCounter, int FPS)
 		playerRec.x += movingSpeed;
 		if (!CheckCollisionRecs(playerRec, block))
 			player.setXPos(playerRec.x); 
-		player.setYFrameRec(player.getSpriteDirection().right * (float)player.getPlayer().height / player.getNumSpritesY());
+		player.setYFrameRec(player.getSprite().right * (float)player.getPlayer().height / player.getSprite().numSpritesY);
 	}
 	else if (IsKeyDown(KEY_LEFT)) 
 	{ 
 		playerRec.x -= movingSpeed;
 		if (!CheckCollisionRecs(playerRec, block))
 			player.setXPos(playerRec.x);
-		player.setYFrameRec(player.getSpriteDirection().left * (float)player.getPlayer().height / player.getNumSpritesY());
+		player.setYFrameRec(player.getSprite().left * (float)player.getPlayer().height / player.getSprite().numSpritesY);
 	}
 	else if (IsKeyDown(KEY_UP))
 	{ 
 		playerRec.y -= movingSpeed;
 		if (!CheckCollisionRecs(playerRec, block))
 			player.setYPos(playerRec.y); 
-		player.setYFrameRec(player.getSpriteDirection().up * (float)player.getPlayer().height / player.getNumSpritesY());
+		player.setYFrameRec(player.getSprite().up * (float)player.getPlayer().height / player.getSprite().numSpritesY);
 	}
 	else if (IsKeyDown(KEY_DOWN)) 
 	{ 
 		playerRec.y += movingSpeed;
 		if (!CheckCollisionRecs(playerRec, block))
 			player.setYPos(playerRec.y);
-		player.setYFrameRec(player.getSpriteDirection().down * (float)player.getPlayer().height / player.getNumSpritesY());
+		player.setYFrameRec(player.getSprite().down * (float)player.getPlayer().height / player.getSprite().numSpritesY);
 	}
 
 	// makes the sprite move faster or slower along with the actual movement of the box
@@ -99,17 +99,17 @@ void GamePlay::updateGamePlayScreen(int &framesCounter, int FPS)
 			framesCounter = 0;
 			currentFrame++;
 
-			if (currentFrame > player.getNumSpritesX()-1) currentFrame = 0;
+			if (currentFrame > player.getSprite().numSpritesX-1) currentFrame = 0;
 
 			int padding = 0; // if you have artifiacting on the edges this can help
-			player.setXFrameRec(((float)currentFrame*(float)player.getPlayer().width / player.getNumSpritesX())-padding);
+			player.setXFrameRec(((float)currentFrame*(float)player.getPlayer().width / player.getSprite().numSpritesX) - padding);
 		}
 	}
 	// if the player is not moving it reverts back to the first sprite character in the file
 	else
 	{
 		currentFrame = 0;
-		player.setXFrameRec((float)currentFrame*(float)player.getPlayer().width / player.getNumSpritesX());
+		player.setXFrameRec((float)currentFrame*(float)player.getPlayer().width / player.getSprite().numSpritesX);
 	}
 	camera.target = player.getPosition();
 }
@@ -127,16 +127,16 @@ void GamePlay::drawGamePlay()
 void PlayerCharacter::loadPlayer()
 {
 	player = LoadTexture("resources/player.png");        // Texture loading
-	numSpritesX = 4;
-	numSpritesY = 4;
-
+	
+	sprite.numSpritesX = 4;
+	sprite.numSpritesY = 4;
 	sprite.up = 3;
 	sprite.down = 0;
 	sprite.left = 1;
 	sprite.right = 2;
 
-	position = { GetScreenWidth() / 2.0f - (player.width / numSpritesX) / 2, GetScreenHeight() / 2.0f - (player.height / numSpritesY) };
-	frameRec = { 0.0f, 0.0f, (float)player.width / numSpritesX, (float)player.height / numSpritesY };
+	position = { GetScreenWidth() / 2.0f - (player.width / sprite.numSpritesX) / 2, GetScreenHeight() / 2.0f - (player.height / sprite.numSpritesY) };
+	frameRec = { 0.0f, 0.0f, (float)player.width / sprite.numSpritesX, (float)player.height / sprite.numSpritesY };
 }
 
 
@@ -165,17 +165,9 @@ void PlayerCharacter::setYFrameRec(float y)
 	frameRec.y = y;
 }
 
-int PlayerCharacter::getNumSpritesX()
-{
-	return numSpritesX;
-}
 
-int PlayerCharacter::getNumSpritesY()
-{
-	return numSpritesY;
-}
 
-spriteOrientation PlayerCharacter::getSpriteDirection()
+spriteData PlayerCharacter::getSprite()
 {
 	return sprite;
 }

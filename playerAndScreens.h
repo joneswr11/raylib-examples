@@ -2,11 +2,13 @@
 
 #include "raylib.h"
 
-struct spriteOrientation{
+struct spriteData{
 	int up;
 	int down;
 	int left;
 	int right;
+	int numSpritesX;
+	int numSpritesY;
 };
 
 class PlayerCharacter
@@ -18,9 +20,7 @@ public:
 	void setYPos(float x);
 	void setXFrameRec(float x);
 	void setYFrameRec(float y);
-	int getNumSpritesX();
-	int getNumSpritesY();
-	spriteOrientation getSpriteDirection();
+	spriteData getSprite();
 
 	Texture2D getPlayer();
 	Rectangle getFrameRec();
@@ -30,9 +30,7 @@ private:
 	Texture2D player;
 	Rectangle frameRec;
 	Vector2 position;
-	int numSpritesX;
-	int numSpritesY;
-	spriteOrientation sprite;
+	spriteData sprite;
 
 };
 
