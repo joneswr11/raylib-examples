@@ -3,12 +3,12 @@
 #include "raylib.h"
 
 struct spriteData{
-	int up;
-	int down;
-	int left;
-	int right;
-	int numSpritesX;
-	int numSpritesY;
+	int up; // Row in the file where the sprite is facing up
+	int down; // Row in the file where the sprite is facing down
+	int left; // Row in the file where the sprite is facing left
+	int right; // Row in the file where the sprite is facing right
+	int numSpritesX; // How many sprites are in a given sequence
+	int numSpritesY; // How many sprites sequences are there
 };
 
 class PlayerCharacter
