@@ -30,6 +30,7 @@ public:
 	void unloadGamePlayScreen();
 private:
 	PlayerCharacter player;
+	Rectangle block;
 	int currentFrame;
 	int framesSpeed;            // Number of spritesheet frames shown by second
 	Camera2D camera;

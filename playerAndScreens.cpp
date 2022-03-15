@@ -1,4 +1,5 @@
 #include "playerAndScreens.h"
+#include <iostream>
 
 //void Screens::drawLoading()
 //{
@@ -25,8 +26,8 @@ void GamePlay::loadGamePlayScreen()
 	player.loadPlayer();
 	currentFrame = 0;
 	framesSpeed = 1;
+	block = { 200, 50, player.getFrameRec().width, 250 };
 
-	camera = { 0 };
 	camera.target = player.getPosition();
 	camera.offset = player.getPosition();
 	camera.rotation = 0.0f;
@@ -41,16 +42,38 @@ void GamePlay::unloadGamePlayScreen()
 void GamePlay::updateGamePlayScreen(int &framesCounter, int FPS)
 {
 
-	float movingSpeed = 2.0f;
+	float movingSpeed = 3.0f;
 	// simulate running
 	if (IsKeyDown(KEY_B))
-		movingSpeed = 4.0f;
+		movingSpeed = 5.0f;
 
+	Rectangle playerRec = { player.getPosition().x, player.getPosition().y, player.getFrameRec().width, player.getFrameRec().height };
 	// Only able to move in one direction at a time
-	if (IsKeyDown(KEY_RIGHT)) player.setXPos(player.getPosition().x + movingSpeed);
-	else if (IsKeyDown(KEY_LEFT)) player.setXPos(player.getPosition().x - movingSpeed);
-	else if (IsKeyDown(KEY_UP)) player.setYPos(player.getPosition().y - movingSpeed);
-	else if (IsKeyDown(KEY_DOWN)) player.setYPos(player.getPosition().y + movingSpeed);
+	// Also checks to see if the player will collied with a block.
+	if (IsKeyDown(KEY_RIGHT))
+	{ 
+		playerRec.x += movingSpeed;
+		if (!CheckCollisionRecs(playerRec, block))
+			player.setXPos(playerRec.x); 
+	}
+	else if (IsKeyDown(KEY_LEFT)) 
+	{ 
+		playerRec.x -= movingSpeed;
+		if (!CheckCollisionRecs(playerRec, block))
+			player.setXPos(playerRec.x);
+	}
+	else if (IsKeyDown(KEY_UP))
+	{ 
+		playerRec.y -= movingSpeed;
+		if (!CheckCollisionRecs(playerRec, block))
+			player.setYPos(playerRec.y); 
+	}
+	else if (IsKeyDown(KEY_DOWN)) 
+	{ 
+		playerRec.y += movingSpeed;
+		if (!CheckCollisionRecs(playerRec, block))
+			player.setYPos(playerRec.y);
+	}
 
 	// makes the sprite move faster or slower along with the actual movement of the box
 	framesSpeed = (int)movingSpeed * 3;
@@ -90,7 +113,7 @@ void GamePlay::drawGamePlay()
 {
 	BeginMode2D(camera);
 	DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), RED);
-	DrawRectangle(100, 200, 50, 75, BLACK);
+	DrawRectangleRec(block, BLACK);
 
 	DrawTextureRec(player.getPlayer(), player.getFrameRec(), player.getPosition(), WHITE);  // Draw part of the texture
 	EndMode2D();

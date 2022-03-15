@@ -526,7 +526,7 @@ void camera2d()
 	Rectangle frameRec = { 0.0f, 0.0f, (float)player.width / 8, (float)player.height };
 	int currentFrame = 0;
 
-	Camera2D camera = { 0 };
+	Camera2D camera;
 	camera.target = position;
 	camera.offset = position;
 	camera.rotation = 0.0f;
