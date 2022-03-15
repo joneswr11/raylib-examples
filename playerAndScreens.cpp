@@ -333,6 +333,7 @@ int LoadingScreen::updateState(int &framesCounter)
 
 void LoadingScreen::drawLoadingScreen(int &framesCounter)
 {
+	ClearBackground(RAYWHITE);
 	if (state == 0)
 	{
 		if ((framesCounter / 15) % 2) DrawRectangle(logoPositionX, logoPositionY, 16, 16, BLACK);
