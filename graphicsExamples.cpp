@@ -626,7 +626,10 @@ void fadeInImage()
 
 	float sizeX = 50;
 	float sizeY = 28;
-	Background image; // just because the background struct has the ability to resize, not using it for a background
+
+	// Using the background struct just because it already has the ability to resize,
+	// not using it for a background
+	Background image; 
 	image.imageTexture = LoadRenderTexture(600, 400);
 	image.imageTexture.texture = LoadTexture("resources/grass.png");
 	image.src = { (float)screenWidth / 2 - image.imageTexture.texture.width / 2, (float)screenHeight / 2 - image.imageTexture.texture.height / 2,  (float)image.imageTexture.texture.width, (float)image.imageTexture.texture.height };
@@ -670,6 +673,14 @@ void fadeInImage()
 				fadingText = true;
 			else if (alphaText <= 0)
 				fadingText = false;
+		}
+
+		// bypass the fading in 
+		if (IsKeyPressed(KEY_ENTER))
+		{
+			alphaImage = 1;
+			sizeX = 600;
+			sizeY = 400;
 		}
 
 		//----------------------------------------------------------------------------------
