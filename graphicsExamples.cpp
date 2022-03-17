@@ -646,9 +646,8 @@ void fadeInImage()
 		//----------------------------------------------------------------------------------
 		float blink = 0.004f;
 		// Set fading in for texture
-		alphaImage += blink;
-		if (alphaImage >= 1)
-			alphaImage = 1;
+		if (alphaImage <= 1)
+			alphaImage += blink;
 
 		if (sizeX <= 600)
 			sizeX += 2;
