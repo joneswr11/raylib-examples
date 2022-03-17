@@ -10,6 +10,7 @@
 #define TEXTUREBOXCOLLISIONTEST 6
 #define CHANGINGSCREENSTEST 7
 #define CAMERA2D 8
+#define BLINKINGIMAGE 9
 
 int main(int argc, char* argv[])
 {
@@ -61,6 +62,9 @@ int main(int argc, char* argv[])
 			break;
 		case CAMERA2D:
 			camera2d();
+			break;
+		case BLINKINGIMAGE:
+			fadeInImage(); 
 			break;
 		default:
 			std::cout << "Invalid Number\n";

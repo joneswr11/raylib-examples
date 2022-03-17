@@ -614,3 +614,85 @@ void camera2d()
 	//--------------------------------------------------------------------------------------
 
 }
+
+void fadeInImage()
+{
+	// Initialization
+	//--------------------------------------------------------------------------------------
+	const int screenWidth = 800;
+	const int screenHeight = 450;
+
+	InitWindow(screenWidth, screenHeight, "raylib blinking image example");
+
+	float sizeX = 50;
+	float sizeY = 28;
+	Background image; // just because the background struct has the ability to resize, not using it for a background
+	image.imageTexture = LoadRenderTexture(600, 400);
+	image.imageTexture.texture = LoadTexture("resources/grass.png");
+	image.src = { (float)screenWidth / 2 - image.imageTexture.texture.width / 2, (float)screenHeight / 2 - image.imageTexture.texture.height / 2,  (float)image.imageTexture.texture.width, (float)image.imageTexture.texture.height };
+	image.dest = { (float)screenWidth / 2 - sizeX / 2, (float)screenHeight / 2 - sizeY / 2, (float)sizeX, (float)sizeY };
+
+	float alphaImage = 0.0f;
+	float alphaText = 0.0f;
+	bool fadingText = false;
+
+	SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
+	//--------------------------------------------------------------------------------------
+
+	// Main game loop
+	while (!WindowShouldClose())    // Detect window close button or ESC key
+	{
+		// Update
+		//----------------------------------------------------------------------------------
+		float blink = 0.004f;
+		// Set fading in for texture
+		alphaImage += blink;
+		if (alphaImage >= 1)
+			alphaImage = 1;
+
+		if (sizeX <= 600)
+			sizeX += 2;
+		if (sizeY <= 400)
+			sizeY += 1.35f;
+
+		// makes image grow in the middle of the screen rather than from a single point
+		image.src = { screenWidth / 2 - sizeX / 2, screenHeight / 2 - sizeY / 2, (float)image.imageTexture.texture.width, (float)image.imageTexture.texture.height };
+		image.dest = { screenWidth / 2 - sizeX / 2, screenHeight / 2 - sizeY / 2, sizeX, sizeY };
+
+		// Set fading for text once image is fully displayed
+		if (sizeX >= 600 && sizeY >= 400)
+		{
+			if (fadingText)
+				blink = -0.02f;
+			else
+				blink = 0.02f;
+			alphaText += blink;
+			if (alphaText >= 1)
+				fadingText = true;
+			else if (alphaText <= 0)
+				fadingText = false;
+		}
+
+		//----------------------------------------------------------------------------------
+
+		// Draw
+		//----------------------------------------------------------------------------------
+		BeginDrawing();
+
+		ClearBackground(RAYWHITE);
+
+		DrawTexturePro(image.imageTexture.texture, image.src, image.dest, { 0,0 }, 0, Fade(GREEN, alphaImage));
+		DrawText("Blinking text", GetScreenWidth() / 2 - 75, GetScreenHeight() - 20, 20, Fade(GRAY, alphaText));
+
+		EndDrawing();
+		//----------------------------------------------------------------------------------
+	}
+
+	// De-Initialization
+	//--------------------------------------------------------------------------------------
+	UnloadRenderTexture(image.imageTexture);
+	UnloadTexture(image.imageTexture.texture);
+	CloseWindow();        // Close window and OpenGL context
+	//--------------------------------------------------------------------------------------
+
+}
