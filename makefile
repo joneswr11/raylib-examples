@@ -28,9 +28,8 @@ release: clean
 release: $(TARGET)
 
 OBJECTS = $(patsubst %.cpp, %.o, $(wildcard *.cpp))
-HEADERS = $(wildcard *.h $(INCLUDES)*.h)
 
-%.o: %.cpp $(HEADERS)
+%.o: %.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 .PRECIOUS: $(TARGET) $(OBJECTS)

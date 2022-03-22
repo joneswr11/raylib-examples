@@ -1,6 +1,7 @@
 #include "graphicsExamples.h"
 
 #include <iostream>
+#include <string>
 
 #define BASICTEST 1
 #define SCISSORTEST 2
@@ -23,15 +24,14 @@ int main(int argc, char* argv[])
 	try
 	{
 		bool isNumber = true;
-		char *input = argv[1];
-		while (*input)
+		std::string input = argv[1];
+		for (int x = 0; x < static_cast<int>(input.size()); x++)
 		{
-			if (!isdigit(*input))
+			if (!isdigit(input[x]))
 			{
 				isNumber = false;
 				break;
 			}
-			*input++;
 		}
 		if (!isNumber) 
 			throw - 1;
