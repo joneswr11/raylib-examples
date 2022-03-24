@@ -34,11 +34,19 @@ void GamePlay::loadGamePlayScreen()
 
 	float x = 200;
 	float y = 75;
+	int objNum = 0;
 
 	rowOfTrees.sprite = LoadTexture("resources/tree.png");
 	rowOfTrees.frameRec = { 0, 0, (float)rowOfTrees.sprite.width*NUMTREES, (float)rowOfTrees.sprite.height};
 	rowOfTrees.position = { x, y };
 	rowOfTrees.spriteRec = { rowOfTrees.position.x + 20, rowOfTrees.position.y + 10, rowOfTrees.frameRec.width - 30, rowOfTrees.frameRec.height - 20 };
+	
+	objects[objNum++] = rowOfTrees.spriteRec;
+
+	invisibleBox = { x, y + 75, x - 100, y };
+	objects[objNum++] = invisibleBox;
+
+
 
 
 	camera.target = player.getPosition();
@@ -63,7 +71,7 @@ void GamePlay::updateGamePlayScreen(int &framesCounter, int FPS)
 	if (IsKeyDown(KEY_B))
 		movingSpeed = 5.0f;
 
-	//bool collision = false;
+	bool collision = false;
 
 	Rectangle playerRec = { player.getPosition().x, player.getPosition().y, player.getFrameRec().width, player.getFrameRec().height };
 	// Only able to move in one direction at a time
@@ -72,14 +80,30 @@ void GamePlay::updateGamePlayScreen(int &framesCounter, int FPS)
 	{ 
 		playerRec.x += movingSpeed;
 
-		if (!CheckCollisionRecs(playerRec, rowOfTrees.spriteRec))
+		for (Rectangle obj : objects)
+		{
+			if (CheckCollisionRecs(playerRec, obj))
+			{
+				collision = true;
+				break;
+			}
+		}
+		if (!collision)
 			player.setXPos(playerRec.x); 
 		player.setYFrameRec(player.getSprite().right * (float)player.getPlayer().height / player.getSprite().numSpritesY);
 	}
 	else if (IsKeyDown(KEY_LEFT)) 
 	{ 
 		playerRec.x -= movingSpeed;
-		if (!CheckCollisionRecs(playerRec, rowOfTrees.spriteRec))
+		for (Rectangle obj : objects)
+		{
+			if (CheckCollisionRecs(playerRec, obj))
+			{
+				collision = true;
+				break;
+			}
+		}
+		if (!collision)
 			player.setXPos(playerRec.x);
 		player.setYFrameRec(player.getSprite().left * (float)player.getPlayer().height / player.getSprite().numSpritesY);
 	}
@@ -87,15 +111,31 @@ void GamePlay::updateGamePlayScreen(int &framesCounter, int FPS)
 	{ 
 		playerRec.y -= movingSpeed;
 
-		if (!CheckCollisionRecs(playerRec, rowOfTrees.spriteRec))
-			player.setYPos(playerRec.y); 
+		for (Rectangle obj : objects)
+		{
+			if (CheckCollisionRecs(playerRec, obj))
+			{
+				collision = true;
+				break;
+			}
+		}
+		if (!collision)
+			player.setYPos(playerRec.y);
 		player.setYFrameRec(player.getSprite().up * (float)player.getPlayer().height / player.getSprite().numSpritesY);
 	}
 	else if (IsKeyDown(KEY_DOWN)) 
 	{ 
 		playerRec.y += movingSpeed;
 
-		if (!CheckCollisionRecs(playerRec, rowOfTrees.spriteRec))
+		for (Rectangle obj : objects)
+		{
+			if (CheckCollisionRecs(playerRec, obj))
+			{
+				collision = true;
+				break;
+			}
+		}
+		if (!collision)
 			player.setYPos(playerRec.y);
 		player.setYFrameRec(player.getSprite().down * (float)player.getPlayer().height / player.getSprite().numSpritesY);
 	}
@@ -141,6 +181,7 @@ void GamePlay::drawGamePlay()
 	BeginMode2D(camera);
 	DrawTexturePro(background.imageTexture.texture, background.src, background.dest, { 0, 0 }, 0, WHITE);
 	DrawTextureRec(rowOfTrees.sprite, rowOfTrees.frameRec, rowOfTrees.position, GREEN);
+	DrawRectangle(invisibleBox.x, invisibleBox.y, invisibleBox.width, invisibleBox.height, BLACK);
 	DrawTextureRec(player.getPlayer(), player.getFrameRec(), player.getPosition(), WHITE);  // Draw part of the texture
 	EndMode2D();
 }

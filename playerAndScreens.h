@@ -2,7 +2,9 @@
 
 #include "raylib.h"
 
+
 const int NUMTREES = 14;
+const int OBJECTS = 2;
 struct spriteData{
 	int up; // Row in the file where the sprite is facing up
 	int down; // Row in the file where the sprite is facing down
@@ -60,6 +62,8 @@ public:
 private:
 	PlayerCharacter player;
 	spriteObject rowOfTrees;
+	Rectangle invisibleBox;
+	Rectangle objects[OBJECTS];
 	Background background;
 	int currentFrame;
 	int framesSpeed;            // Number of spritesheet frames shown by second
