@@ -390,7 +390,7 @@ void changingScreens()
 
 	InitWindow(screenWidth, screenHeight, "raylib [core] example - basic screen manager (modified)");
 	
-	GameScreen currentScreen = LOGO;
+	GameScreen currentScreen = TITLE;
 
 	int framesCounter = 0;  // Useful to count frames
 

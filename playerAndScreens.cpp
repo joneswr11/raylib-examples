@@ -34,14 +34,12 @@ void GamePlay::loadGamePlayScreen()
 
 	float x = 200;
 	float y = 75;
-	for (int i = 0; i < NUMTREES;i++)
-	{
-		trees[i].sprite = LoadTexture("resources/tree.png");
-		trees[i].frameRec = { 0, 0, (float)trees[i].sprite.width, (float)trees[i].sprite.height };
-		trees[i].position = { x, y };
-		trees[i].spriteRec = { trees[i].position.x + 20, trees[i].position.y + 10, trees[i].frameRec.width - 30, trees[i].frameRec.height - 20 };
-	    x += trees[i].frameRec.width;
-	}
+
+	rowOfTrees.sprite = LoadTexture("resources/tree.png");
+	rowOfTrees.frameRec = { 0, 0, (float)rowOfTrees.sprite.width*NUMTREES, (float)rowOfTrees.sprite.height};
+	rowOfTrees.position = { x, y };
+	rowOfTrees.spriteRec = { rowOfTrees.position.x + 20, rowOfTrees.position.y + 10, rowOfTrees.frameRec.width - 30, rowOfTrees.frameRec.height - 20 };
+
 
 	camera.target = player.getPosition();
 	camera.offset = player.getPosition();
@@ -52,8 +50,7 @@ void GamePlay::loadGamePlayScreen()
 void GamePlay::unloadGamePlayScreen()
 {
 	player.unload();
-	for (spriteObject tree : trees)
-		UnloadTexture(tree.sprite);
+	UnloadTexture(rowOfTrees.sprite);
 	UnloadRenderTexture(background.imageTexture);
 	UnloadTexture(background.imageTexture.texture);
 }
@@ -66,7 +63,7 @@ void GamePlay::updateGamePlayScreen(int &framesCounter, int FPS)
 	if (IsKeyDown(KEY_B))
 		movingSpeed = 5.0f;
 
-	bool collision = false;
+	//bool collision = false;
 
 	Rectangle playerRec = { player.getPosition().x, player.getPosition().y, player.getFrameRec().width, player.getFrameRec().height };
 	// Only able to move in one direction at a time
@@ -74,60 +71,31 @@ void GamePlay::updateGamePlayScreen(int &framesCounter, int FPS)
 	if (IsKeyDown(KEY_RIGHT))
 	{ 
 		playerRec.x += movingSpeed;
-		for (spriteObject tree : trees)
-		{
-			if (CheckCollisionRecs(playerRec, tree.spriteRec))
-			{
-				collision = true;
-				break;
-			}
-		}
-		if (!collision)
+
+		if (!CheckCollisionRecs(playerRec, rowOfTrees.spriteRec))
 			player.setXPos(playerRec.x); 
 		player.setYFrameRec(player.getSprite().right * (float)player.getPlayer().height / player.getSprite().numSpritesY);
 	}
 	else if (IsKeyDown(KEY_LEFT)) 
 	{ 
 		playerRec.x -= movingSpeed;
-		for (spriteObject tree : trees)
-		{
-			if (CheckCollisionRecs(playerRec, tree.spriteRec))
-			{
-				collision = true;
-				break;
-			}
-		}
-		if (!collision)
+		if (!CheckCollisionRecs(playerRec, rowOfTrees.spriteRec))
 			player.setXPos(playerRec.x);
 		player.setYFrameRec(player.getSprite().left * (float)player.getPlayer().height / player.getSprite().numSpritesY);
 	}
 	else if (IsKeyDown(KEY_UP))
 	{ 
 		playerRec.y -= movingSpeed;
-		for (spriteObject tree : trees)
-		{
-			if (CheckCollisionRecs(playerRec, tree.spriteRec))
-			{
-				collision = true;
-				break;
-			}
-		}
-		if (!collision)
+
+		if (!CheckCollisionRecs(playerRec, rowOfTrees.spriteRec))
 			player.setYPos(playerRec.y); 
 		player.setYFrameRec(player.getSprite().up * (float)player.getPlayer().height / player.getSprite().numSpritesY);
 	}
 	else if (IsKeyDown(KEY_DOWN)) 
 	{ 
 		playerRec.y += movingSpeed;
-		for (spriteObject tree : trees)
-		{
-			if (CheckCollisionRecs(playerRec, tree.spriteRec))
-			{
-				collision = true;
-				break;
-			}
-		}
-		if (!collision)
+
+		if (!CheckCollisionRecs(playerRec, rowOfTrees.spriteRec))
 			player.setYPos(playerRec.y);
 		player.setYFrameRec(player.getSprite().down * (float)player.getPlayer().height / player.getSprite().numSpritesY);
 	}
@@ -156,6 +124,7 @@ void GamePlay::updateGamePlayScreen(int &framesCounter, int FPS)
 
 			int padding = 0; // if you have artifiacting on the edges this can help
 			player.setXFrameRec(((float)currentFrame*(float)player.getPlayer().width / player.getSprite().numSpritesX) - padding);
+			std::cout << "Player (x, y) pos: " << player.getPosition().x << ", " << player.getPosition().y << std::endl;
 		}
 	}
 	// if the player is not moving it reverts back to the first sprite character in the file
@@ -171,14 +140,7 @@ void GamePlay::drawGamePlay()
 {
 	BeginMode2D(camera);
 	DrawTexturePro(background.imageTexture.texture, background.src, background.dest, { 0, 0 }, 0, WHITE);
-	//DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), RED);
-	//DrawRectangleRec(block, BLACK);
-	//DrawTextureRec(tree.sprite, tree.frameRec, tree.position, WHITE);  // Draw part of the texture
-	for (spriteObject tree : trees)
-		DrawTextureRec(tree.sprite, tree.frameRec, tree.position, GREEN);
-	//for (int x = 0; x < NUMTREES; x++)
-	//	DrawTextureRec(trees[x].sprite, trees[x].frameRec, trees[x].position, WHITE);
-
+	DrawTextureRec(rowOfTrees.sprite, rowOfTrees.frameRec, rowOfTrees.position, GREEN);
 	DrawTextureRec(player.getPlayer(), player.getFrameRec(), player.getPosition(), WHITE);  // Draw part of the texture
 	EndMode2D();
 }
