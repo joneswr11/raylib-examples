@@ -4,7 +4,7 @@
 
 
 const int NUMTREES = 14;
-const int OBJECTS = 2;
+const int OBJECTS = 3;
 struct spriteData{
 	int up; // Row in the file where the sprite is facing up
 	int down; // Row in the file where the sprite is facing down

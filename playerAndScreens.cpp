@@ -42,12 +42,8 @@ void GamePlay::loadGamePlayScreen()
 	rowOfTrees.spriteRec = { rowOfTrees.position.x + 20, rowOfTrees.position.y + 10, rowOfTrees.frameRec.width - 30, rowOfTrees.frameRec.height - 20 };
 	
 	objects[objNum++] = rowOfTrees.spriteRec;
-
-	invisibleBox = { x, y + 75, x - 100, y };
-	objects[objNum++] = invisibleBox;
-
-
-
+	objects[objNum++] = { x, y + 120, x - 100, y };
+	objects[objNum++] = { x + 400, y+120, x - 100, y };
 
 	camera.target = player.getPosition();
 	camera.offset = player.getPosition();
@@ -164,7 +160,7 @@ void GamePlay::updateGamePlayScreen(int &framesCounter, int FPS)
 
 			int padding = 0; // if you have artifiacting on the edges this can help
 			player.setXFrameRec(((float)currentFrame*(float)player.getPlayer().width / player.getSprite().numSpritesX) - padding);
-			std::cout << "Player (x, y) pos: " << player.getPosition().x << ", " << player.getPosition().y << std::endl;
+			//std::cout << "Player (x, y) pos: " << player.getPosition().x << ", " << player.getPosition().y << std::endl;
 		}
 	}
 	// if the player is not moving it reverts back to the first sprite character in the file
@@ -181,7 +177,9 @@ void GamePlay::drawGamePlay()
 	BeginMode2D(camera);
 	DrawTexturePro(background.imageTexture.texture, background.src, background.dest, { 0, 0 }, 0, WHITE);
 	DrawTextureRec(rowOfTrees.sprite, rowOfTrees.frameRec, rowOfTrees.position, GREEN);
-	DrawRectangle(invisibleBox.x, invisibleBox.y, invisibleBox.width, invisibleBox.height, BLACK);
+	// only drawing for visual, you don't have to draw it for the collision to happen
+	for (int x = 1; x < OBJECTS;x++)
+		DrawRectangle(objects[x].x, objects[x].y, objects[x].width, objects[x].height, BLACK);
 	DrawTextureRec(player.getPlayer(), player.getFrameRec(), player.getPosition(), WHITE);  // Draw part of the texture
 	EndMode2D();
 }
